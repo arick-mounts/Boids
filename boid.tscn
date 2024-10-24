@@ -7,19 +7,20 @@
 radius = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sq66j"]
-radius = 200.0
+radius = 101.316
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qbqam"]
-radius = 58.0086
+radius = 43.0116
 
-[node name="Boid" type="Node2D" node_paths=PackedStringArray("BODY", "PERSONAL_SPACE")]
+[node name="Boid" type="Node2D" node_paths=PackedStringArray("BODY", "SIGHT", "PERSONAL_SPACE")]
 script = ExtResource("1_80ytv")
 BODY = NodePath("Body")
+SIGHT = NodePath("Sight")
 PERSONAL_SPACE = NodePath("PersonalSpace")
-max_speed = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+rotation = 1.5708
 texture = ExtResource("1_1soha")
 
 [node name="Body" type="Area2D" parent="."]
@@ -35,6 +36,7 @@ collision_layer = 0
 shape = SubResource("CircleShape2D_sq66j")
 
 [node name="PersonalSpace" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PersonalSpace"]
 shape = SubResource("CircleShape2D_qbqam")
