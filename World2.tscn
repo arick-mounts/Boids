@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://lfkxwyf7yrhf"]
+
+[ext_resource type="PackedScene" uid="uid://84v7i1kntt72" path="res://boid_manager.tscn" id="1_km8sy"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(576, 324)
+
+[node name="BoidManager" parent="." instance=ExtResource("1_km8sy")]
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0

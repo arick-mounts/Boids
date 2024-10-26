@@ -10,7 +10,7 @@ radius = 8.0
 radius = 101.316
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qbqam"]
-radius = 43.0116
+radius = 33.0
 
 [node name="Boid" type="Node2D" node_paths=PackedStringArray("BODY", "SIGHT", "PERSONAL_SPACE")]
 script = ExtResource("1_80ytv")
