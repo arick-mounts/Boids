@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://lfkxwyf7yrhf"]
+[gd_scene load_steps=5 format=3 uid="uid://lfkxwyf7yrhf"]
 
 [ext_resource type="PackedScene" uid="uid://84v7i1kntt72" path="res://boid_manager.tscn" id="1_km8sy"]
+[ext_resource type="Script" path="res://label.gd" id="2_3i4q5"]
+[ext_resource type="Script" path="res://min_speed.gd" id="3_iw772"]
+[ext_resource type="Script" path="res://max_speed.gd" id="4_sdndr"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -8,6 +11,236 @@
 unique_name_in_owner = true
 position = Vector2(576, 324)
 
-[node name="BoidManager" parent="." instance=ExtResource("1_km8sy")]
+[node name="BoidManager" parent="." node_paths=PackedStringArray("avoid_factor", "matching_factor", "centering_factor", "min_speed", "max_speed") instance=ExtResource("1_km8sy")]
+avoid_factor = NodePath("../HBoxContainer/Avoidance Factor/Control/Avoidance")
+matching_factor = NodePath("../HBoxContainer/Alignment Factor/Control/Alignment")
+centering_factor = NodePath("../HBoxContainer/Cohesion Factor/Control/Cohesion")
+min_speed = NodePath("../HBoxContainer/Min Speed/Control/MinSpeed")
+max_speed = NodePath("../HBoxContainer/Max Speed/Control/MaxSpeed")
 
 [node name="Node2D" type="Node2D" parent="."]
+
+[node name="HBoxContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 580.0
+offset_right = 1152.0
+offset_bottom = 651.0
+scale = Vector2(0.999486, 1)
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Avoidance Factor" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.008
+anchor_right = 0.174
+offset_left = -0.216001
+offset_right = -0.448013
+offset_bottom = 43.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Avoidance Factor"]
+layout_mode = 2
+text = "Avoidance Factor
+"
+
+[node name="Control" type="Control" parent="HBoxContainer/Avoidance Factor"]
+layout_mode = 2
+
+[node name="Avoidance" type="HSlider" parent="HBoxContainer/Avoidance Factor/Control"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 151.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 0.2
+step = 0.01
+
+[node name="Label" type="Label" parent="HBoxContainer/Avoidance Factor/Control" node_paths=PackedStringArray("h_slider")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -38.9172
+offset_top = 1.0
+offset_right = 1.08276
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1"
+vertical_alignment = 1
+script = ExtResource("2_3i4q5")
+h_slider = NodePath("../Avoidance")
+
+[node name="Cohesion Factor" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+offset_left = 200.103
+offset_right = 391.103
+offset_bottom = 43.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Cohesion Factor"]
+layout_mode = 2
+text = "Cohesion Factor
+"
+
+[node name="Control" type="Control" parent="HBoxContainer/Cohesion Factor"]
+layout_mode = 2
+
+[node name="Cohesion" type="HSlider" parent="HBoxContainer/Cohesion Factor/Control"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 151.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 0.01
+step = 0.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Cohesion Factor/Control" node_paths=PackedStringArray("h_slider")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -38.9172
+offset_top = 1.0
+offset_right = 1.08276
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1"
+script = ExtResource("2_3i4q5")
+h_slider = NodePath("../Cohesion")
+decimals = 5
+
+[node name="Alignment Factor" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+offset_left = 391.201
+offset_right = 582.201
+offset_bottom = 43.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Alignment Factor"]
+layout_mode = 2
+text = "Alignment Factor
+"
+
+[node name="Control" type="Control" parent="HBoxContainer/Alignment Factor"]
+layout_mode = 2
+
+[node name="Alignment" type="HSlider" parent="HBoxContainer/Alignment Factor/Control"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 151.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 0.5
+step = 0.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Alignment Factor/Control" node_paths=PackedStringArray("h_slider")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -38.9172
+offset_top = 1.0
+offset_right = 1.08276
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1"
+script = ExtResource("2_3i4q5")
+h_slider = NodePath("../Alignment")
+
+[node name="Min Speed" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+offset_left = 581.299
+offset_right = 772.299
+offset_bottom = 43.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Min Speed"]
+layout_mode = 2
+text = "Minimum Speed"
+
+[node name="Control" type="Control" parent="HBoxContainer/Min Speed"]
+layout_mode = 2
+
+[node name="MinSpeed" type="HSlider" parent="HBoxContainer/Min Speed/Control"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 151.0
+offset_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.5
+script = ExtResource("3_iw772")
+
+[node name="Label" type="Label" parent="HBoxContainer/Min Speed/Control" node_paths=PackedStringArray("h_slider")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -38.9172
+offset_top = 1.0
+offset_right = 1.08276
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1"
+script = ExtResource("2_3i4q5")
+h_slider = NodePath("../MinSpeed")
+
+[node name="Max Speed" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+offset_left = 772.397
+offset_right = 963.397
+offset_bottom = 43.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Max Speed"]
+layout_mode = 2
+text = "Maximum Speed"
+
+[node name="Control" type="Control" parent="HBoxContainer/Max Speed"]
+layout_mode = 2
+
+[node name="MaxSpeed" type="HSlider" parent="HBoxContainer/Max Speed/Control"]
+layout_mode = 2
+offset_left = 2.00103
+offset_top = 5.0
+offset_right = 153.001
+offset_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.5
+value = 1.0
+script = ExtResource("4_sdndr")
+
+[node name="Label" type="Label" parent="HBoxContainer/Max Speed/Control" node_paths=PackedStringArray("h_slider")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -38.9172
+offset_top = 1.0
+offset_right = 1.08276
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1"
+script = ExtResource("2_3i4q5")
+h_slider = NodePath("../MaxSpeed")
+
+[connection signal="value_changed" from="HBoxContainer/Min Speed/Control/MinSpeed" to="HBoxContainer/Max Speed/Control/MaxSpeed" method="_on_min_speed_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/Max Speed/Control/MaxSpeed" to="HBoxContainer/Min Speed/Control/MinSpeed" method="_on_max_speed_value_changed"]

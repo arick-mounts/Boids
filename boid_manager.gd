@@ -1,19 +1,19 @@
 extends Node2D
 
 @export_group("PARAMETERS")
-@export var avoid_proportion: float = 2
-@export var avoid_factor:float = 5
-@export var matching_factor:float = .05
-@export var centering_factor:float = .0005
-@export var turn_factor = .1
-@export var min_speed = 1
-@export var max_speed = 17
+@export var avoid_factor:Range
+@export var matching_factor:Range
+@export var centering_factor:Range 
+@export var turn_factor = .2
+@export var avoid_speed = 2
+@export var min_speed :Range
+@export var max_speed :Range
 
-var numBoids = 40
+var numBoids = 80
 var boids: Array[boid_boi]
 
-var personal_space = 30
-var sight = 100
+var personal_space = 20
+var sight = 35
 
 var personal_space_sqrd = personal_space ^ 2
 var sight_sqrd = sight ^2
@@ -27,7 +27,11 @@ var y_min
 var y_max 
 
 func _ready() -> void:
-	
+	avoid_factor.value =0.05
+	matching_factor.value =0.05
+	centering_factor.value =0.0005
+	min_speed.value = 3
+	max_speed.value = 5
 	screensize = get_viewport().get_visible_rect()
 	print(screensize)
 	x_min = screensize.position.x
@@ -37,23 +41,24 @@ func _ready() -> void:
 	for i in numBoids:
 		var boid = boid_boi.new()
 		boid.global_position = Vector2(randi_range(x_min,x_max),randi_range(y_min,y_max))
-		boid.velocity = Vector2.from_angle(randf_range(0,TAU)).normalized() * randf_range(min_speed, 2) 
-		boids.push_front(boid)
+		boid.velocity = Vector2.from_angle(randf_range(0,TAU)).normalized() * randf_range(min_speed.value, max_speed.value)
+		boids.push_back(boid)
 		add_child(boid)
 	
 func _physics_process(_delta)->void:
+	var first = true
 	for boid in boids:
 		var velocity = boid.velocity
 		var avoidanceVector = Vector2.ZERO
 		var averageVelocity = Vector2.ZERO
 		var averagePosition = Vector2.ZERO
 		var neighboring_boids = 0
-		
 		for other_boid in boids:
 			if other_boid == boid:
-				break
+				continue
 			elif(boid.global_position.distance_to(other_boid.global_position) < personal_space ):
-				avoidanceVector += (boid.global_position - other_boid.global_position)
+				var difference = (boid.global_position - other_boid.global_position)
+				avoidanceVector += difference 
 			elif(boid.global_position.distance_to(other_boid.global_position) < sight):
 				averageVelocity += other_boid.velocity
 				averagePosition += other_boid.global_position
@@ -62,14 +67,12 @@ func _physics_process(_delta)->void:
 		if(neighboring_boids >0):
 			averageVelocity = averageVelocity/neighboring_boids
 			averagePosition = averagePosition/neighboring_boids
-			#if(averagePosition != Vector2.ZERO):
-			velocity += (averagePosition - boid.global_position) * centering_factor
-			velocity += (averageVelocity - velocity) * matching_factor
+			velocity += (averagePosition - boid.global_position) * centering_factor.value
+			velocity += (averageVelocity - velocity) * matching_factor.value
 			
-		var speed = velocity.length()
-		velocity += Vector2( clamp(avoid_factor/avoidanceVector.x,-speed,speed) if avoidanceVector.x != 0 else avoidanceVector.x, clamp(avoid_factor/avoidanceVector.y,-speed,speed) if avoidanceVector.y != 0 else avoidanceVector.y)
+		velocity +=  avoidanceVector * avoid_factor.value
 		
-		
+		first=false
 		if(boid.global_position.x < x_min):
 			velocity.x += turn_factor
 		if(boid.global_position.x > x_max):
@@ -78,10 +81,16 @@ func _physics_process(_delta)->void:
 			velocity.y += turn_factor
 		if(boid.global_position.y > y_max):
 			velocity.y -= turn_factor
-		if(speed < min_speed):
-			velocity = (velocity/speed) * min_speed
-		if (speed>max_speed):
-			velocity = (velocity/speed) * max_speed
+			
+		var speed = velocity.length()
+		if(speed == 0):
+			if(max_speed.value != 0):
+				velocity = Vector2.from_angle(randf_range(0,TAU)).normalized() * randf_range(min_speed.value, max_speed.value)
+		else:
+			if (speed>max_speed.value):
+					velocity = ((velocity/speed) * max_speed.value) 
+			elif(speed < min_speed.value):
+				velocity = (velocity/speed) * min_speed.value 
 		boid.velocity = velocity
 
 	
