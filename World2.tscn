@@ -11,11 +11,3 @@ position = Vector2(576, 324)
 [node name="BoidManager" parent="." instance=ExtResource("1_km8sy")]
 
 [node name="Node2D" type="Node2D" parent="."]
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 40.0
-grow_vertical = 0
